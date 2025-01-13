@@ -77,9 +77,6 @@ jobs:
           ref: testnet-with-accounts
           path: madara-testnet
 
-      - uses: actions/checkout@v3
-        with:
-          submodules: true
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
