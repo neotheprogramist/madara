@@ -114,6 +114,10 @@ jobs:
           scarb build
         working-directory: madara-runner
 
+      - name: Echo
+        run: |
+          echo "test"
+
       - name: Build openrpc-testgen-runner
         run: |
           cargo build --release --features "openrpc" -p openrpc-testgen -p openrpc-testgen-runner
