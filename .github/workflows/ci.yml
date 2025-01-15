@@ -119,6 +119,10 @@ jobs:
           cargo build --release --features "openrpc" -p openrpc-testgen -p openrpc-testgen-runner
         working-directory: madara-runner
 
+      - name: Echo
+        run: |
+          echo "test"
+
       - name: Run OpenRPC Suite
         run: |
           URLS="http://localhost:9944"
