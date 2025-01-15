@@ -12,6 +12,7 @@ WORKDIR /usr/src/madara/
 COPY Cargo.toml Cargo.lock ./
 COPY crates crates
 COPY cairo-artifacts cairo-artifacts
+COPY .db-versions.yml .db-versions.yml
 
 # Install runtime dependencies
 RUN apt-get -y update && \
@@ -22,11 +23,12 @@ RUN apt-get -y update && \
 
 # Build the application in release mode
 RUN cargo build --release
+
 # Stage 2: Create the final runtime image
 FROM debian:bookworm
 # Install runtime dependencies
 RUN apt-get -y update && \
-    apt-get install -y openssl ca-certificates tini curl &&\
+    apt-get install -y openssl ca-certificates tini curl && \
     apt-get autoremove -y; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*
@@ -34,6 +36,8 @@ RUN apt-get -y update && \
 WORKDIR /usr/local/bin
 # Copy the compiled binary from the builder stage
 COPY --from=builder /usr/src/madara/target/release/madara .
+# Copy chain_config_template.yaml
+COPY configs/chain_config.template.yaml /usr/local/bin/chain_config.template.yaml
 
 # Set the entrypoint
 ENTRYPOINT ["./madara"]
